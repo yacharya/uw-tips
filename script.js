@@ -15,10 +15,10 @@ const set_of_words = [
                 ["Assertive", "Confident", "Sympathetic", "Tolerant"],
                 ["Will-power", "Open-minded", "Cheerful", "Obliging"],
                 ["Unconquerable", "Playful", "Obedient", "Fussy"],
-                ["Brave", "Inspiring", "Submissive", "Timind"],
+                ["Brave", "Inspiring", "Submissive", "Timid"],
                 ["Positive", "Trusting", "Contented", "Peaceful"],
                 ["Determined", "Convincing", "Good-natured", "Cautious"],
-                ["Aggressive", "Life-of-the-party", "Easily-foooled", "Uncertain"],
+                ["Aggressive", "Life-of-the-party", "Easily-fooled", "Uncertain"],
                 ["Daring", "Expressive", "Satisfied", "Diplomatic"],
                 ["Self-reliant", "Fun-loving", "Patient", "Soft-spoken"],
                 ["Nervy", "Jovial", "Even-tempered", "Precise"],
@@ -30,6 +30,7 @@ const set_of_words = [
 let counter1 = 0, counter2 = 0, counter3 = 0, counter4 = 0;
 
 const quizContainer = document.getElementById('quiz');
+const quizOuterContainer = document.getElementById('quiz-container');
 const submitButton = document.getElementById('submit-btn');
 const titleContainer = document.getElementById('title-container');
 const resultsContainer = document.getElementById('results-container');
@@ -85,6 +86,7 @@ function calculateResults() {
 }
 
 function showResults() {
+    quizOuterContainer.style.display = 'none';
     quizContainer.style.display = 'none';
     submitButton.style.display = 'none';
     titleContainer.style.display = 'block';
@@ -93,7 +95,7 @@ function showResults() {
     const data = {
         labels: ['Driver', 'Expressive', 'Amiable', 'Analytic'],
         datasets: [{
-            label: 'Scores',
+            //label: 'Scores',
             data: [counter1, counter2, counter3, counter4],
             backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56']
         }]
@@ -105,14 +107,26 @@ function showResults() {
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        display: true
+                    }
+                },
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        display: true
+                    },
+                    title: {
+                        display: false
+                    }
                 }
             }
         }
     });
 }
 
-
+/*
 function resetQuiz(){
     counter1 = 0;
     counter2 = 0;
@@ -132,8 +146,11 @@ function restartQuiz() {
     resetQuiz();
     createQuiz();
 }
+*/
 
 submitButton.addEventListener('click', calculateResults);
-restartButton.addEventListener('click', restartQuiz);
+restartButton.addEventListener('click', function() {
+    location.reload();
+});
 
 createQuiz();
