@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UW TIPS: Personal Styles Inventory</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div id="title-container">
+        <img src="uw-tips.png" alt="Logo" id="title-image">
+    </div>    
+</head>
+<body>
+    <div class="header">
+        <h1>Personal Styles Inventory</h1>
+    </div>
+
+    <div id="quiz-container">
+        <div id="quiz">
+            <p>Select the word or phrase in each set that is most like you.</p>
+            <!--
+            The sets of words and radio buttons will be generated here by JavaScript
+            -->
+        </div>
+
+        <button id="submit-btn">Submit Quiz</button>
+    </div>
+
+    <div id="results-container" style="display: none;">
+        <h2>Your Personality Type Scores</h2>
+        <canvas id="result-chart" width="400" height="200"></canvas>
+        <button id="restart-btn">Restart Quiz</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
