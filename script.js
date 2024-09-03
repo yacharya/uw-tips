@@ -32,18 +32,17 @@ let counter1 = 0, counter2 = 0, counter3 = 0, counter4 = 0;
 const quizContainer = document.getElementById('quiz');
 const quizOuterContainer = document.getElementById('quiz-container');
 const submitButton = document.getElementById('submit-btn');
-const titleContainer = document.getElementById('title-container');
+const titleContainer = document.getElementById('header');
 const resultsContainer = document.getElementById('results-container');
 const resultChart = document.getElementById('result-chart').getContext('2d');
 const restartButton = document.getElementById('restart-btn');
 
 function createQuiz() {
-
     set_of_words.forEach((set, index) => {
         const div = document.createElement('div');
         div.classList.add('question-set');
         const elem = document.createElement('hr')
-        elem.setAttribute("width", "500px")
+        elem.setAttribute("width", "100%")
 
         set.forEach((word, i) => {
             const radio = document.createElement('input');
@@ -95,7 +94,7 @@ function showResults() {
     const data = {
         labels: ['Driver', 'Expressive', 'Amiable', 'Analytic'],
         datasets: [{
-            //label: 'Scores',
+            label: null,
             data: [counter1, counter2, counter3, counter4],
             backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56']
         }]
@@ -105,48 +104,35 @@ function showResults() {
         type: 'bar',
         data: data,
         options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false // If you don't need the legend at all, you can turn it off completely
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        display: true
+                    },
+                    title: {
+                        display: null
                     }
                 },
-                x: {
+                x : {
                     beginAtZero: true,
                     ticks: {
                         display: true
                     },
                     title: {
-                        display: false
+                        display: null
                     }
                 }
             }
         }
     });
 }
-
-/*
-function resetQuiz(){
-    counter1 = 0;
-    counter2 = 0;
-    counter3 = 0;
-    counter4 = 0;
-
-    if (resultsContainer) {
-        resultsContainer.innerHTML = '';
-    }
-
-    quizContainer.innerHTML = '';
-    quizContainer.style.display = 'block';
-    submitButton.style.display = 'block';
-}
-
-function restartQuiz() {
-    resetQuiz();
-    createQuiz();
-}
-*/
 
 submitButton.addEventListener('click', calculateResults);
 restartButton.addEventListener('click', function() {
