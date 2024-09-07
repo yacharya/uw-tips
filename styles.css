@@ -10,7 +10,7 @@ body {
 }
 
 #title-container {
-    display: change flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     margin-right: 40px;
