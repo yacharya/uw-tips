@@ -43,6 +43,9 @@ function createQuiz() {
         div.classList.add('question-set');
         const elem = document.createElement('hr')
         elem.setAttribute("width", "100%")
+        const questionHeader = document.createElement('h3');
+        questionHeader.textContent = `Question ${index + 1}`;
+        div.appendChild(questionHeader);     
 
         set.forEach((word, i) => {
             const radio = document.createElement('input');
@@ -51,6 +54,12 @@ function createQuiz() {
             radio.value = i + 1;
             const label = document.createElement('label');
             label.textContent = word;
+            label.prepend(radio);
+            radio.id = `question${index}option${i}`;
+
+            const label = document.createElement('label');
+            label.textContent = word;
+            label.setAttribute('for', radio.id); 
             label.prepend(radio);
 
             div.appendChild(label);
