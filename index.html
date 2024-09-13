@@ -1,33 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UW TIPS: Personal Styles Inventory</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <div id="header">
-        <img src="uw-tips.png" alt="Logo" id="header-logo">
-        <h1>Personal Styles Inventory</h2>
-    </div>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Styles Inventory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <div id="header">
+    <img src="uw-tips.png" alt="Logo" id="header-logo">
+    <h1>Personal Styles Inventory</h1>
+  </div>
 </head>
-<body>
-    <div id="quiz-container">
-        <h3>Start the quiz!</h3>
-        <p>Select the word or phrase in each set that is most like you.</p>
-        <div id="quiz">
-            <!--
-            The sets of words and radio buttons will be generated here by JavaScript
-            -->
-        </div>
-        <button id="submit-btn">Submit Quiz</button>
-    </div>
 
-    <div id="results-container" style="display: none;">
-        <h2>Your Personality Type Scores</h2>
-        <canvas id="result-chart" width="400" height="200"></canvas>
-        <button id="restart-btn">Restart Quiz</button>
-    </div>
-    <script src="script.js"></script>
+<body>
+  <div id="start-container">
+    <h2>Welcome to the Personal Styles Inventory</h2>
+    <h3>This quiz will help you understand your personality traits.</h3>
+    <button id="begin-btn">Begin</button>
+  </div>
+
+  <div id="quiz-container">
+    <h3>Select one word from each set that is most like you.</h3>
+    <div id="quiz"></div>
+  </div>
+
+  <div id="results-container">
+    <h2>Your Results</h2>
+    <h3>Merrill and Reid Personal Styles Inventory Results</h3>
+    <canvas id="result-chart"></canvas>
+    <p>The longest bar is your <i>predominant style</i>. The second longest bar is your <i>backup style</i></p>
+    <button id="restart-btn">Restart</button>
+    <footer>
+      <p>Source: David Merrill & Roger Reid, <i>Personal Styles and Effective Performance</i></p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+
 </body>
+
 </html>
