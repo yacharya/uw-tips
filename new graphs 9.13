@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Styles Inventory</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chart-container {
+            width: 50%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-container">
+        <h1>Welcome to the Personal Styles Inventory</h1>
+        <button id="begin-btn">Begin</button>
+    </div>
+
+    <div id="quiz-container">
+        <h1>Personal Styles Inventory</h1>
+        <h3>Select one word from each set that is most like you.</h3>
+        <div id="quiz"></div>
+    </div>
+
+    <div id="results-container">
+        <h2>Merrill and Reid Personal Styles Inventory Results</h2>
+        
+        <!-- Stacked Bar Chart -->
+        <div class="chart-container">
+            <canvas id="stackedBarChart"></canvas>
+        </div>
+        
+        <!-- Radar Chart -->
+        <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+        </div>
+        
+        <button id="restart-btn">Restart</button>
+    </div>
+
+    <script>
+        const set_of_words = [
+      ["Competitive", "Joyful", "Harmonious",     "Considerate"],
+      ["Powerful", "Good mixer", "Easy on others", "Organized"],
+      ["Adventurous", "Creative", "Empathetic", "Determined"],
+      ["Optimistic", "Practical", "Flexible", "Reliable"],
+      ["Bold", "Charming", "Loyal", "Easily Led"],
+      ["Stubborn", "Attractive", "Sweet", "Avoids"],
+      ["Argumentative", "Light-hearted", "Nonchalant", "Adaptable"],
+      ["Forceful", "Admirable", "Kind", "Non-resisting"],
+      ["Tries new ideas", "Optimistic", "Wants to please", "Respectful"],
+      ["Restless", "Popular", "Neighbourly", "Abides by rules"],
+      ["Outspoken", "Companionable", "Restrained", "Accurate"],
+      ["Decisive", "Talkative", "Controlled", "Conventional"],
+      ["Original", "Persuasive", "Gentle", "Humble"],
+      ["Assertive", "Confident", "Sympathetic", "Tolerant"],
+      ["Will-power", "Open-minded", "Cheerful", "Obliging"],
+      ["Unconquerable", "Playful", "Obedient", "Fussy"],
+      ["Brave", "Inspiring", "Submissive", "Timid"],
+      ["Positive", "Trusting", "Contented", "Peaceful"],
+      ["Determined", "Convincing", "Good-natured", "Cautious"],
+      ["Aggressive", "Life-of-the-party", "Easily-fooled", "Uncertain"],
+      ["Daring", "Expressive", "Satisfied", "Diplomatic"],
+      ["Self-reliant", "Fun-loving", "Patient", "Soft-spoken"],
+      ["Nervy", "Jovial", "Even-tempered", "Precise"],
+      ["Takes risks", "Warm", "Willing to help", "Not extreme"],
+      ["Persistent", "Lively", "Generous", "Well-disciplined"],
+      ["Eager", "High-spirited", "Willing", "Agreeable"]
+        ];
+
+        const startContainer = document.getElementById('start-container');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results-container');
+        const beginButton = document.getElementById('begin-btn');
+        const restartButton = document.getElementById('restart-btn');
+
+        let scores = [0, 0, 0, 0]; // To hold scores for Driver, Expressive, Amiable, Analytical
+
+        function createQuiz() {
+            const quizDiv = document.getElementById('quiz');
+            set_of_words.forEach((set, index) => {
+                const div = document.createElement('div');
+                const questionHeader = document.createElement('h4');
+                questionHeader.textContent = `Set ${index + 1}`;
+                div.appendChild(questionHeader);
+                const optionsDiv = document.createElement('div');
+
+                set.forEach((word, i) => {
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `question${index}`;
+                    radio.value = i + 1;
+
+                    const label = document.createElement('label');
+                    label.textContent = word;
+                    label.prepend(radio);
+                    optionsDiv.appendChild(label);
+                });
+
+                div.appendChild(optionsDiv);
+                quizDiv.appendChild(div);
+            });
+
+            const submitButton = document.createElement('button');
+            submitButton.textContent = 'Submit';
+            submitButton.addEventListener('click', calculateResults);
+            quizDiv.appendChild(submitButton);
+        }
+
+        function startQuiz() {
+            startContainer.style.display = 'none';
+            quizContainer.style.display = 'block';
+            createQuiz();
+        }
+
+        function calculateResults() {
+            const selectedOptions = document.querySelectorAll('input[type="radio"]:checked');
+
+            selectedOptions.forEach((option, index) => {
+                scores[index % 4] += parseInt(option.value); // Distribute scores evenly among the 4 styles
+            });
+
+            showResults();
+        }
+
+        function showResults() {
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
+            // Data for the chart
+            const personalityStyles = ['Analytical', 'Driver', 'Amiable', 'Expressive'];
+
+            // Stacked Bar Chart Configuration
+            const stackedBarChartConfig = {
+                type: 'bar',
+                data: {
+                    labels: personalityStyles,
+                    datasets: [{
+                        label: 'Personality Scores',
+                        data: scores,
+                        backgroundColor: ['#3498db', '#e74c3c', '#2ecc71', '#f1c40f'],
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: { 
+                            stacked: true,
+                        },
+                        y: {
+                            beginAtZero: true,
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Score'
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Radar Chart Configuration
+            const radarChartConfig = {
+                type: 'radar',
+                data: {
+                    labels: Personal Styles,
+                    datasets: [{
+                        label: 'Personality Profile',
+                        data: scores,
+                        backgroundColor: 'rgba(52, 152, 219, 0.5)',
+                        borderColor: '#3498db',
+                        pointBackgroundColor: '#3498db',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#3498db'
+                    }]
+                },
+                options: {
+                    scale: {
+                        ticks: { 
+                            beginAtZero: true,
+                            max: 20 // Adjust based on the maximum possible score
+                        }
+                    }
+                }
+            };
+
+            // Create the charts
+            const stackedBarCtx = document.getElementById('stackedBarChart').getContext('2d');
+            const stackedBarChart = new Chart(stackedBarCtx, stackedBarChartConfig);
+            
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            const radarChart = new Chart(radarCtx, radarChartConfig);
+        }
+
+        beginButton.addEventListener('click', startQuiz);
+        restartButton.addEventListener('click', function() {
+            window.location.reload();
+        });
+    </script>
+
+</body>
+</html>
