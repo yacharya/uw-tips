@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Styles Inventory</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS -->
+</head>
+<body>
+  <div id="start-container">
+    <h1>Welcome to the Personal Styles Inventory</h1>
+    <button id="begin-btn">Begin</button>
+  </div>
+
+  <div id="quiz-container">
+    <h1>Personal Styles Inventory</h1>
+    <h3>Select one word from each set that is most like you.</h3>
+    <div id="quiz"></div>
+  </div>
+  
+  <div id="results-container">
+    <h1>Your Results</h1>
+    <div class="chart-container">
+      <canvas id="stackedBarChart"></canvas>
+    </div>
+    
+    <div class="chart-container">
+      <canvas id="radarChart"></canvas>
+    </div>
+    
+    <button id="restart-btn">Restart</button>
+  </div>
+
+  <script>
+    // JavaScript logic remains unchanged.
+  </script>
+</body>
+</html>
