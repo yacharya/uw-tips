@@ -1,0 +1,271 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Styles Inventory</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #cbbfde;
+    }
+    #start-container, #quiz-container, #results-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+      display: none;
+    }
+    #start-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    button {
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #4b2e83;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 200px;
+    }
+    button:hover {
+      background-color: #633db0;
+    }
+    #results-container {
+      display: none;
+      text-align: center;
+    }
+    .chart-container {
+      margin: 20px 0;
+      width: 100%;
+    }
+    canvas {
+      max-width: 100%;
+    }
+    .question-set {
+      margin-bottom: 20px;
+    }
+    .question-set h4 {
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    .question-set .options {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .question-set label {
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="start-container">
+    <h1>Welcome to the Personal Styles Inventory</h1>
+    <button id="begin-btn">Begin</button>
+  </div>
+  
+  <div id="quiz-container">
+    <h1>Personal Styles Inventory</h1>
+    <h3>Select one word from each set that is most like you.</h3>
+    <div id="quiz"></div>
+  </div>
+  
+  <div id="results-container">
+    <h1>Your Results</h1>
+      <footer>
+    <p>Source: <i>David Merrill & Roger Reid, Personal Styles and Effective Performance</i></p>
+  </footer>
+
+
+    <!-- Stacked Bar Chart -->
+    <div class="chart-container">
+      <canvas id="stackedBarChart"></canvas>
+    </div>
+    
+    <!-- Radar Chart -->
+    <div class="chart-container">
+      <canvas id="radarChart"></canvas>
+    </div>
+
+    <button id="restart-btn">Restart</button>
+  </div>
+
+  <script>
+    const set_of_words = [
+      ["Competitive", "Joyful", "Harmonious", "Considerate"],
+      ["Powerful", "Good mixer", "Easy on others", "Organized"],
+      ["Adventurous", "Creative", "Empathetic", "Determined"],
+      ["Optimistic", "Practical", "Flexible", "Reliable"],
+      ["Bold", "Charming", "Loyal", "Easily Led"],
+      ["Stubborn", "Attractive", "Sweet", "Avoids"],
+      ["Argumentative", "Light-hearted", "Nonchalant", "Adaptable"],
+      ["Forceful", "Admirable", "Kind", "Non-resisting"],
+      ["Tries new ideas", "Optimistic", "Wants to please", "Respectful"],
+      ["Restless", "Popular", "Neighbourly", "Abides by rules"],
+      ["Outspoken", "Companionable", "Restrained", "Accurate"],
+      ["Decisive", "Talkative", "Controlled", "Conventional"],
+      ["Original", "Persuasive", "Gentle", "Humble"],
+      ["Assertive", "Confident", "Sympathetic", "Tolerant"],
+      ["Will-power", "Open-minded", "Cheerful", "Obliging"],
+      ["Unconquerable", "Playful", "Obedient", "Fussy"],
+      ["Brave", "Inspiring", "Submissive", "Timid"],
+      ["Positive", "Trusting", "Contented", "Peaceful"],
+      ["Determined", "Convincing", "Good-natured", "Cautious"],
+      ["Aggressive", "Life-of-the-party", "Easily-fooled", "Uncertain"],
+      ["Daring", "Expressive", "Satisfied", "Diplomatic"],
+      ["Self-reliant", "Fun-loving", "Patient", "Soft-spoken"],
+      ["Nervy", "Jovial", "Even-tempered", "Precise"],
+      ["Takes risks", "Warm", "Willing to help", "Not extreme"],
+      ["Persistent", "Lively", "Generous", "Well-disciplined"],
+      ["Eager", "High-spirited", "Willing", "Agreeable"]
+    ];
+
+    let counter1 = 0, counter2 = 0, counter3 = 0, counter4 = 0;
+
+    const startContainer = document.getElementById('start-container');
+    const quizContainer = document.getElementById('quiz-container');
+    const resultsContainer = document.getElementById('results-container');
+    const beginButton = document.getElementById('begin-btn');
+    const restartButton = document.getElementById('restart-btn');
+
+    function startQuiz() {
+      startContainer.style.display = 'none';
+      quizContainer.style.display = 'block';
+      createQuiz();
+    }
+
+    function createQuiz() {
+      const quizDiv = document.getElementById('quiz');
+      set_of_words.forEach((set, index) => {
+        const div = document.createElement('div');
+        div.classList.add('question-set');
+        const questionHeader = document.createElement('h4');
+        questionHeader.textContent = `Set ${index + 1}`;
+        div.appendChild(questionHeader);
+        
+        const optionsDiv = document.createElement('div');
+        optionsDiv.classList.add('options');
+        set.forEach((word, i) => {
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = `question${index}`;
+          radio.value = i + 1;
+          
+          const label = document.createElement('label');
+          label.textContent = word;
+          label.prepend(radio);
+          optionsDiv.appendChild(label);
+        });
+        div.appendChild(optionsDiv);
+        quizDiv.appendChild(div);
+        const hr = document.createElement('hr');
+        quizDiv.appendChild(hr);
+      });
+
+      const submitButton = document.createElement('button');
+      submitButton.textContent = 'Submit';
+      submitButton.addEventListener('click', calculateResults);
+      quizContainer.appendChild(submitButton);
+    }
+
+    function calculateResults() {
+      const selectedOptions = document.querySelectorAll('input[type="radio"]:checked');
+      selectedOptions.forEach((option, index) => {
+        const selectedValue = parseInt(option.value);
+        switch (index + 1) {
+          case 1:
+            counter1 += selectedValue;
+            break;
+          case 2:
+            counter2 += selectedValue;
+            break;
+          case 3:
+            counter3 += selectedValue;
+            break;
+          case 4:
+            counter4 += selectedValue;
+            break;
+        }
+      });
+      showResults();
+    }
+
+    function showResults() {
+      quizContainer.style.display = 'none';
+      resultsContainer.style.display = 'block';
+
+      const scores = [counter1, counter2, counter3, counter4];
+      const personalityStyles = ['Analytical', 'Driver', 'Amiable', 'Expressive'];
+
+      // Stacked Bar Chart Configuration
+      const stackedBarChartConfig = {
+        type: 'bar',
+        data: {
+          labels: personalityStyles,
+          datasets: [{
+            label: 'Personality Scores',
+            data: scores,
+            backgroundColor: ['#3498db', '#e74c3c', '#2ecc71', '#f1c40f'],
+          }]
+        },
+        options: {
+          scales: {
+            x: { stacked: true },
+            y: {
+              beginAtZero: true,
+              stacked: true,
+              title: { display: true, text: 'Score' }
+            }
+          }
+        }
+      };
+
+      // Radar Chart Configuration
+      const radarChartConfig = {
+        type: 'radar',
+        data: {
+          labels: personalityStyles,
+          datasets: [{
+            label: 'Personality Profile',
+            data: scores,
+            backgroundColor: 'rgba(52, 152, 219, 0.5)',
+            borderColor: '#3498db',
+            pointBackgroundColor: '#3498db'
+          }]
+        },
+        options: {
+          scale: { ticks: { beginAtZero: true, max: 20 } }
+        }
+      };
+
+      // Create the charts
+      const stackedBarCtx = document.getElementById('stackedBarChart').getContext('2d');
+      new Chart(stackedBarCtx, stackedBarChartConfig);
+
+      const radarCtx = document.getElementById('radarChart').getContext('2d');
+      new Chart(radarCtx, radarChartConfig);
+    }
+
+    beginButton.addEventListener('click', startQuiz);
+    restartButton.addEventListener('click', function() {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>
